@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 阿羽导航站 🚀</title>
+    <style>
+        /* 全局重置和基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 页面整体样式 */
+        body {
+            font-family: '微软雅黑', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 主容器样式 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 搜索框区域样式 */
+        .search-box {
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        /* 搜索输入框样式 */
+        #search {
+            width: 60%;
+            padding: 15px 25px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* 搜索框聚焦状态 */
+        #search:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+            width: 65%;
+        }
+
+        /* 分类区块样式 */
+        .category {
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* 分类标题样式 */
+        .category h2 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* 链接容器网格布局 */
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        /* 单个链接样式 */
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* 链接悬停效果 */
+        .link-item:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 网站图标样式 */
+        .favicon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            object-fit: contain;
+        }
+
+        /* 响应式设计 - 平板及以下 */
+        @media (max-width: 768px) {
+            #search {
+                width: 90%;
+            }
+            
+            .links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 响应式设计 - 手机端 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .links {
+                grid-template-columns: 1fr;
+            }
+            
+            #search {
+                padding: 12px 20px;
+            }
+        }
+
+        /* 分类折叠箭头样式 */
+        .toggle-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        /* 折叠状态样式 */
+        .collapsed .links {
+            display: none;
+        }
+        
+        .collapsed .toggle-arrow {
+            transform: rotate(-90deg);
+        }
+
+        /* Emoji样式 */
+        .emoji {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 搜索区域 -->
+        <div class="search-box">
+            <input type="text" 
+                   id="search" 
+                   placeholder="🔍 输入关键词搜索网站..."
+                   aria-label="网站搜索">
+        </div>
+
+        <!-- 分类区块将通过JavaScript动态生成 -->
+    </div>
+
+    <script>
+        /**
+         * 网站数据配置对象
+         */
+        const siteData = {
+            categories: [
+                {
+                    name: '📚 常用工具',
+                    items: [
+                        {
+                            name: '百度',
+                            url: 'https://www.baidu.com',
+                            icon: 'https://baidu.com/favicon.ico'
+                        },
+                        {
+                            name: '一个木函',
+                            url: 'https://ol.woobx.cn/',
+                            icon: 'https://ol.woobx.cn/favicon.ico'
+                        },
+                        {
+                            name: 'Bing',
+                            url: 'https://www.bing.com',
+                            icon: 'https://www.bing.com/favicon.ico'
+                        }
+                    ]
+                },
+              
+                {   
+                  name: '💻 技术社区',
+                    items: [
+                        {
+                            name: 'GitHub',
+                            url: 'https://github.com',
+                            icon: 'https://kkgithub.com/favicon.ico'
+                        },
+                        {
+                            name: 'Stack Overflow',
+                            url: 'https://stackoverflow.com',
+                            icon: 'https://stackoverflow.com/favicon.ico'
+                        }
+                    ]
+                },
+                {   
+                  name: '🌍动漫网站',
+                    items: [
+                        {
+                            name: '樱花动漫0',
+                            url: 'http://vdm4.com/',
+                            icon: 'https://github.com/favicon.ico'
+                        },
+                        {
+                          name: '樱花动漫1',
+                          url: 'http://yinghuadm.fun/',
+                          icon: 'https://yinghuadm.fun/favicon.ico'
+                        },
+                        {
+                          name: '樱花动漫2',
+                          url: 'http://yinghua8.cc/',
+                          icon: 'https://github.com/favicon.ico'
+                        },
+                        {
+                          name: '樱花动漫3',
+                          url: 'http://xiuluodm.com/',
+                          icon: 'https://github.com/favicon.ico'
+                        },
+                        {
+                          name: '漫次元',
+                          url: 'http://www.mcydh.com/',
+                          icon: 'https://github.com/favicon.ico'
+                        },
+                        {
+                          name: 'MiFun',
+                          url: 'http://ios.mifun.org/',
+                          icon: 'https://github.com/favicon.ico'
+                        },
+                        {
+                          name: '橘子ACG',
+                          url: 'http://www.mgnacg.com/',
+                          icon: 'https://www.mgnacg.com/favicon.ico'
+                        },
+                       {
+                             name: 'age动漫(经常失效)',
+                            url: 'https://agedm.org/',
+                            icon: 'https://stackoverflow.com/favicon.ico'
+                        }
+                    ]
+                },
+                {
+                    name: '🎨 设计资源',
+                    items: [
+                        {
+                            name: 'Dribbble',
+                            url: 'https://dribbble.com',
+                            icon: 'https://dribbble.com/favicon.ico'
+                        },
+                        {
+                            name: 'Behance',
+                            url: 'https://www.behance.net',
+                            icon: 'https://www.behance.net/favicon.ico'
+                        }
+                        
+                  
+                    ]
+                }
+            ]
+        };
+
+        /**
+         * 初始化导航站
+         */
+        function initNavigation() {
+            const container = document.querySelector('.container');
+            
+            siteData.categories.forEach(category => {
+                // 创建分类容器
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                // 创建标题（带折叠功能）
+                const heading = document.createElement('h2');
+                heading.innerHTML = `
+                    <span class="emoji">${category.name.split(' ')[0]}</span>
+                    ${category.name.split(' ').slice(1).join(' ')}
+                    <span class="toggle-arrow">▶</span>
+                `;
+                
+                // 创建链接容器
+                const linksDiv = document.createElement('div');
+                linksDiv.className = 'links';
+                
+                // 填充链接项
+                category.items.forEach(item => {
+                    const link = document.createElement('a');
+                    link.className = 'link-item';
+                    link.href = item.url;
+                    link.target = '_blank';
+                    link.innerHTML = `
+                        <img class="favicon" src="${item.icon}" alt="${item.name}图标" 
+                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0iI2ZmZiI+PGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTIiLz48L3N2Zz4='">
+                        ${item.name}
+                    `;
+                    linksDiv.appendChild(link);
+                });
+
+                // 组装分类区块
+                categoryDiv.appendChild(heading);
+                categoryDiv.appendChild(linksDiv);
+                container.appendChild(categoryDiv);
+            });
+
+            // 添加分类折叠功能
+            addCategoryToggle();
+        }
+
+        /**
+         * 添加分类折叠功能
+         */
+        function addCategoryToggle() {
+            document.querySelectorAll('.category h2').forEach(heading => {
+                heading.addEventListener('click', () => {
+                    const categoryDiv = heading.parentElement;
+                    categoryDiv.classList.toggle('collapsed');
+                });
+            });
+        }
+
+        /**
+         * 实现实时搜索功能
+         */
+        function setupSearch() {
+            const searchInput = document.getElementById('search');
+            
+            searchInput.addEventListener('input', function(e) {
+                const keyword = e.target.value.trim().toLowerCase();
+                const allLinks = document.querySelectorAll('.link-item');
+                
+                allLinks.forEach(link => {
+                    const linkText = link.textContent.toLowerCase();
+                    const searchContent = linkText + (link.dataset.name || '');
+                    link.style.display = searchContent.includes(keyword) ? 'flex' : 'none';
+                });
+            });
+        }
+
+        /**
+         * 图片加载失败处理
+         */
+        
+
+        // 初始化执行
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            setupSearch();
+            handleImageError();
+            
+            // 页面加载后自动聚焦搜索框
+            document.getElementById('search').focus();
+        });
+    </script>
+</body>
+</html>
